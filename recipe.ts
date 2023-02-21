@@ -23,7 +23,7 @@ export class RecipeRest {
     }
 
     create(req: Request, res: Response) {
-        
+        console.log(req.body);
     }
 
     update(req: Request, res: Response, id: number) {

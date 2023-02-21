@@ -1,9 +1,14 @@
 import express from "express";
+import bodyParser from "body-parser";
 //import {style_data} from "./style_data_load.js";
 import {recipe_data} from "./recipe_data_load.js";
 import {RecipeRest} from "./recipe.js";
- 
+
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
 
 app.get('/', (req, res) => {
     res.send('It works!');
@@ -12,7 +17,7 @@ app.get('/', (req, res) => {
 app.resource = function(path: string, obj: RecipeRest) {
     this.get(path, (q,r)=> obj.index(q,r));
     this.get(path + '/:id', (q,r)=> obj.show(q,r));
-    this.post(path, obj.create);
+    this.post(path, (q,r)=> obj.create(q,r));
     this.put(`${path}/:id`, function(req, res) {
         var id = parseInt(req.params.id, 10);
         obj.update(req, res, id);
