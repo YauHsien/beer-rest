@@ -1,7 +1,8 @@
+import {IfRest} from "./interface.js";
 import {Request, Response} from "express";
 import {TypeRecipe} from "./recipe_data_load.js";
 
-export class RecipeRest {
+export class RecipeRest implements IfRest {
     data: (TypeRecipe|null)[] = [null];
 
     constructor(recipe_data: TypeRecipe[]) {
@@ -23,7 +24,10 @@ export class RecipeRest {
     }
 
     create(req: Request, res: Response) {
-        console.log(req.body);
+        let new_id: number = this.data.length;
+        let new_record: TypeRecipe = create_record(req.body, new_id);
+        this.data[this.data.length] = new_record;
+        res.send({result: 'OK'});
     }
 
     update(req: Request, res: Response, id: number) {
@@ -39,3 +43,7 @@ export class RecipeRest {
         res.send({result: 'ok'});
     }
 };
+
+function create_record(record: object, new_id: number): TypeRecipe {
+    throw undefined;
+}
