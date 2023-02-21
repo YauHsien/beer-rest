@@ -1,3 +1,5 @@
+import {Request, Response} from "express";
+import {TypeRecipe} from "./recipe_data_load.js";
 
 var users = [
     { name: 'tj' }
@@ -8,31 +10,42 @@ var users = [
     , { name: 'tobi' }
 ];
 
-export var Recipe = {
-    index: function(req, res){
-        res.send(users);
-    },
-    show: function(req, res){
-        res.send(users[req.params.id] || { error: 'Cannot find user' });
-    },
-    destroy: function(req, res, id){
-        var destroyed = id in users;
-        delete users[id];
-        res.send(destroyed ? 'destroyed' : 'Cannot find user');
-    },
-    range: function(req, res, a, b, format){
-        var range = users.slice(a, b + 1);
-        switch (format) {
-            case 'json':
-                res.send(range);
-                break;
-            case 'html':
-            default:
-                var html = '<ul>' + range.map(function(user){
-                    return '<li>' + user.name + '</li>';
-                }).join('\n') + '</ul>';
-                res.send(html);
-                break;
+export class RecipeRest {
+    data: (TypeRecipe|null)[] = [null];
+
+    constructor(recipe_data: TypeRecipe[]) {
+        this.data = this.data.concat(recipe_data);
+    }
+
+    index(req: Request, res: Response){
+        res.send({count: this.data.length-1});
+    }
+
+    show(req: Request, res: Response){
+        let id: number = req.params.id as unknown as number;
+        if (!(id in this.data))
+            res.send({error: 'Cannot find recipe'});
+        else if (this.data[id]!.deleted)
+            res.send({error: 'Deleted'});
+        else
+            res.send(this.data[id]);
+    }
+
+    create(req: Request, res: Response) {
+        
+    }
+
+    update(req: Request, res: Response, id: number) {
+        
+    }
+
+    destroy(req: Request, res: Response, id: number){
+        var id_existed = id in this.data;
+        if (!(id in this.data))
+            res.send({error: 'Cannot find recipe'});
+        else if (!this.data[id]!.deleted) {
+            this.data[id]!.deleted = true;
+            res.send({result: 'ok'});
         }
     }
 };

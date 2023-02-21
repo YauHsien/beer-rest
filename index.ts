@@ -1,32 +1,34 @@
 import express from "express";
-import {Recipe} from "./recipe.js";
+//import {style_data} from "./style_data_load.js";
+import {recipe_data} from "./recipe_data_load.js";
+import {RecipeRest} from "./recipe.js";
+ 
 const app = express();
 
 app.get('/', (req, res) => {
     res.send('It works!');
 });
 
-app.resource = function(path, obj) {
-    this.get(path, obj.index);
-    this.get(path + '/:a..:b.:format?', function(req, res){
-        var a = parseInt(req.params.a, 10);
-        var b = parseInt(req.params.b, 10);
-        var format = req.params.format;
-        obj.range(req, res, a, b, format);
+app.resource = function(path: string, obj: RecipeRest) {
+    this.get(path, (q,r)=> obj.index(q,r));
+    this.get(path + '/:id', (q,r)=> obj.show(q,r));
+    this.post(path, obj.create);
+    this.put(`${path}/:id`, function(req, res) {
+        var id = parseInt(req.params.id, 10);
+        obj.update(req, res, id);
     });
-    this.get(path + '/:id', obj.show);
     this.delete(path + '/:id', function(req, res){
         var id = parseInt(req.params.id, 10);
         obj.destroy(req, res, id);
     });
 };
-app.resource('/recipes', Recipe);
+app.resource('/recipes', new RecipeRest(recipe_data));
 
-// curl http://localhost:34567/users     -- responds with all users
-// curl http://localhost:34567/users/1   -- responds with user 1
-// curl http://localhost:34567/users/4   -- responds with error
-// curl http://localhost:34567/users/1..3 -- responds with several users
-// curl -X DELETE http://localhost:34567/users/1  -- deletes the user
+// curl http://localhost:34567/recipes     -- responds with all recipes
+// curl http://localhost:34567/recipes/1   -- responds with user 1
+// curl http://localhost:34567/recipes/4   -- responds with error
+// curl http://localhost:34567/recipes/1..3 -- responds with several recipes
+// curl -X DELETE http://localhost:34567/recipes/1  -- deletes the user
 
 const port = process.env.PORT || 34567;
 app.listen(port, () => console.log(`App listening on PORT ${port}`));
