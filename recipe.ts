@@ -1,15 +1,6 @@
 import {Request, Response} from "express";
 import {TypeRecipe} from "./recipe_data_load.js";
 
-var users = [
-    { name: 'tj' }
-    , { name: 'ciaran' }
-    , { name: 'aaron' }
-    , { name: 'guillermo' }
-    , { name: 'simon' }
-    , { name: 'tobi' }
-];
-
 export class RecipeRest {
     data: (TypeRecipe|null)[] = [null];
 
@@ -43,9 +34,8 @@ export class RecipeRest {
         var id_existed = id in this.data;
         if (!(id in this.data))
             res.send({error: 'Cannot find recipe'});
-        else if (!this.data[id]!.deleted) {
+        else if (!this.data[id]!.deleted)
             this.data[id]!.deleted = true;
-            res.send({result: 'ok'});
-        }
+        res.send({result: 'ok'});
     }
 };
