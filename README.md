@@ -48,12 +48,22 @@ On feasibility and update. All feasible entries are also updatable.
 | Pitch Rate     | Number or 'N/A'  |                          |
 | Primary Temp   | Number or 'N/A'  |                          |
 | Priming Method | Arbitrary string or 'N/A'|                  |
-| Priming Amount | Arbitrary string or 'N/A'|                  |
+| Priming Amount | Arbitrary string or 'N/A**|                  |
 
 ## APIs
 
 - Recipes API
 - Filter API
+
+### 查詢手段
+
+因 NodeJS 給的 HTTP 請求規格， GET 檔頭加傳遞內容總共最多可傳 80KB 量，使得行業裏當有些人要設計大量查詢欄位時，會先將 API 通訊協定設計為以 POST 進行查詢。 Brewer's Friend 網站也如此。
+
+我設計 Filter API 是為了在 Recipes API 簡化過濾查詢，用 session-token 識別查詢條件。
+
+一個 token 代表一位使用者當下要用的一批查詢條件；多少個使用者 session ，系統就支援多少批查詢條件。步調上，使用者先把一批啤酒查詢條件傳過去，系統登記那些查詢條件，查詢批次用 token 識別，之後，在食譜 API 傳遞查詢條件 token，表示要求 Recipes API 依照使用者在 Filter 登記的條件來查詢。
+
+此設計的**好處**：對 Recipes 來說，Filter 是它的外部服務，透過 Filter 服務來獲取大量有關於該用戶的配置，對 Recipes 自己實作上，比較簡單，並且自然而然分別 Recipes 與 Recipe Filter 二個模組。就 Rest 流線上，比較單純，較符合 Rest 原則，對資源的想法也夠清楚：Post 方法就是有系統生成了一個新東西，而我得到那個東西的 Id；Put 方法就是造成一些變動，但我要等下一次 Get 的時候，才獲得已經更動的東西。
 
 ### Recipes API
 |Goal|Method|Resource|
