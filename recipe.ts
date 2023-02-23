@@ -1,11 +1,14 @@
 import {IfRest} from "./interface.js";
 import {Request, Response} from "express";
+import {TypeStyle} from "./style_data_load.js";
 import {TypeRecipe} from "./recipe_data_load.js";
 
 export class RecipeRest implements IfRest {
+    _style_data: (TypeStyle|null)[] = [null];
     data: (TypeRecipe|null)[] = [null];
 
-    constructor(recipe_data: TypeRecipe[]) {
+    constructor(style_data: TypeStyle[], recipe_data: TypeRecipe[]) {
+        this._style_data = this._style_data.concat(style_data);
         this.data = this.data.concat(recipe_data);
     }
 
