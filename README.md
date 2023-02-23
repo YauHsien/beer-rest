@@ -1,9 +1,8 @@
 
 ### Data Fields
 
-+------------------+-------------------+------------------------------+
 | Name           | Data Type        | Description               |
-+------------------+-------------------+------------------------------+
+|----------------|------------------|---------------------------
 | Beer ID        | Positive integer | Record identity           |
 | Name           | Arbitrary string | Brand or descriptive name |
 | URL            | Path string      | Resource indicator        |
