@@ -69,7 +69,7 @@ On feasibility and update. All feasible entries are also updatable.
 |Goal|Method|Resource|
 |----|------|--------|
 |Information|Get|/recipes|
-|Listings with filter|Get|/recipes?f(ilter)=<token>|
+|Listings with filter|Get|/recipes?f(ilter)=`{{filter id}}`|
 |Specific item|Get|/recipes/:id|
 |Create|Post|/recipes|
 |Update|Put|/recipes/:id|
@@ -81,7 +81,7 @@ On feasibility and update. All feasible entries are also updatable.
 |Information|Get|/filters|
 |Specific filter|Get|/filters/:id|
 |Create a stub|Post|/filters|
-|Register a filter entry into some stub|Put|/filters?f(ilter)=<token>|
+|Register a filter entry into some stub|Put|/filters/:id|
 |Delete|Delete|/filters/:id|
 
 #### POST `/filters`
