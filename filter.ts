@@ -1,37 +1,48 @@
-import {IfRest} from "./interface.js";
+import {TypeId, IfRest} from "./interface.js";
 import {Request, Response} from "express";
 
+type Dictionary = {[id: string]: {[k: string]: string}};
+
 export class FilterRest implements IfRest {
-    data: (string|null)[] = [];
+    filters: Dictionary = {};
 
     index(req: Request, res: Response){
-        res.send({count: this.data.length-1});
+        res.send({count: Object.keys(this.filters).length});
     }
 
     show(req: Request, res: Response){
-        let id: number = req.params.id as unknown as number;
-        if (!(id in this.data) || this.data[id] === null)
-            res.send({error: 'Cannot find this user'});
-        else
-            res.send(this.data[id]);
+        let id: string = req.params.id as string;
+        if (id in this.filters) {
+            res.send(this.filters[id]);
+        }
+        else {
+            res.send({error: 'Cannot find entry'});
+        }
     }
 
     create(req: Request, res: Response) {
-        let token = req.body!.token as string;
-        let new_id = this.data.length;
-        this.data[new_id] = token;
+        let token: string = req.body!.token as string;
+        let new_id: string = Object.keys(this.filters).length.toString();
+        this.filters[new_id] = {token: token};
         res.send({id: new_id});
     }
 
-    update(req: Request, res: Response, id: number) {
-        res.send({error: 'Not feasible'});
+    update(req: Request, res: Response, id: TypeId) {
+        if (id in this.filters) {
+            let entry: {[k: string]: string} = this.filters[id];
+            let body = req.body!;
+            for (let key in body) {
+                entry[key] = body[key] as string;
+            }
+        }
+        res.send({result: 'ok'});
     }
 
-    destroy(req: Request, res: Response, id: number){
-        if (!(id in this.data))
-            res.send({error: 'Cannot find entry'});
-        else
-            this.data[id] = null;
+    destroy(req: Request, res: Response, id: TypeId){
+        let _id: string = id.toString();
+        if (_id in this.filters) {
+            delete this.filters[_id];
+        }
         res.send({result: 'ok'});
     }
 };

@@ -79,7 +79,94 @@ On feasibility and update. All feasible entries are also updatable.
 |Goal|Method|Resource|
 |----|------|--------|
 |Information|Get|/filters|
-|Specific filter token|Get|/filters/:id|
+|Specific filter|Get|/filters/:id|
 |Create a stub|Post|/filters|
 |Register a filter entry into some stub|Put|/filters?f(ilter)=<token>|
 |Delete|Delete|/filters/:id|
+
+#### POST `/filters`
+To create a filter stub.
+
+- **Request**
+
+  Body
+
+  ```json
+  { "token": "{{token}}" }
+  ```
+- **Success Resopnse**
+
+  Status Code
+
+  - 200 `Success`
+
+  Content
+
+  ```json
+  { "id": "{{id}}" }
+  ```
+
+#### GET `/filters/:id`
+To get specific filter `:id`.
+
+- **Success Response**
+
+  Status Code
+
+  - 200 `Success`
+
+  Content
+
+  ```json
+  {
+      "token": "{{token}}",
+      "field1": ...
+      ... // Other fields.
+  }
+  ```
+
+  ```json
+  {   "error": "Cannot find entry"  }
+  ```
+
+#### PUT `/filters/:id`
+To register a filter entry on the filter `:id`.
+
+- **Request**
+
+  Body
+
+  ```json
+  {
+      "field1": "{{value1}}",
+      "filed2": "{{value2}}",
+      ... // Other fields.
+  }
+  ```
+
+- **Success Response**
+
+  Status Code
+
+  - 200 `Success`
+
+  Content
+
+  ```json
+  {   "result": "ok"  }
+  ```
+
+#### DELETE `/filters/:id`
+To deprecate a filter.
+
+
+- **Success Response**
+
+  Status Code
+
+  - 200 `Success`
+
+  Content
+
+  ```json
+  {   "result": "ok"  }
