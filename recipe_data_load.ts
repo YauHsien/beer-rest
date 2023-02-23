@@ -3,7 +3,7 @@ import * as path from "path";
 import { parse } from 'csv-parse/sync';
 
 export type TypeRecipe = {
-    deleted: boolean;
+    deleted?: boolean;
     BeerID: number;
     Name: string;
     URL: string;

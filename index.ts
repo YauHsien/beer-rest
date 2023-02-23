@@ -3,7 +3,6 @@ import bodyParser from "body-parser";
 import {style_data} from "./style_data_load.js";
 import {recipe_data} from "./recipe_data_load.js";
 import {IfRest} from "./interface.js";
-import {UserIdentityRest} from "./user_identity.js";
 import {RecipeRest} from "./recipe.js";
 import {FilterRest} from "./filter.js";
 
@@ -31,7 +30,6 @@ app.resource = function(path: string, obj: IfRest) {
     });
 };
 
-app.resource('/users', new UserIdentityRest());
 app.resource('/recipes', new RecipeRest(style_data,recipe_data));
 app.resource('/filters', new FilterRest());
 

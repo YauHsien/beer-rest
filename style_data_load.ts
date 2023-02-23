@@ -3,6 +3,7 @@ import * as path from "path";
 import { parse } from 'csv-parse/sync';
 
 export type TypeStyle = {
+    deleted?: boolean;
     style: string;
     id: number;
 };
